@@ -23,10 +23,16 @@ const EventCard: React.FC = () => {
         fetchData();
     }, []);
 
-   
+    const handleDelete = async(id:number)=>{
+        try {
+            const resonse = axios.delete(`${url}/api/events/${id}`)
+        }catch (e) {
+            console.error(e)
+        }
+    }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px',justifyContent:'center',alignItems:'center' }}>
             {events.map((event) => (
                 <Card key={event.id} sx={{ maxWidth: 345 }}>
                     <CardMedia
@@ -48,7 +54,9 @@ const EventCard: React.FC = () => {
                         <Typography variant="body2" color="text.secondary">
                             Date: {new Date(event.date).toLocaleDateString()}
                         </Typography>
-                        <Button variant='contained'>Записаться</Button>
+                        <Button variant='contained'>Подробнее</Button><br/><br/>
+                        <Button variant='contained'>Записаться</Button><br/><br/>
+                        <Button onClick={() => handleDelete(event.id)} variant='contained'>Удалить</Button><br/><br/>
 
                     </CardContent>
                 </Card>

@@ -53,7 +53,7 @@ const Login: React.FC = () => {
             );
 
             if (response.status === 200) {
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('token', response.data.access_token);
                 const storedToken = localStorage.getItem('token');
                 if (storedToken) {
                     fetchData(storedToken);
