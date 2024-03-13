@@ -6,6 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {url} from "../utils/api";
 import {Event} from "../types/Event";
+import Button from "@mui/material/Button";
 const EventCard: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
 
@@ -21,6 +22,8 @@ const EventCard: React.FC = () => {
 
         fetchData();
     }, []);
+
+   
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -45,6 +48,8 @@ const EventCard: React.FC = () => {
                         <Typography variant="body2" color="text.secondary">
                             Date: {new Date(event.date).toLocaleDateString()}
                         </Typography>
+                        <Button variant='contained'>Записаться</Button>
+
                     </CardContent>
                 </Card>
             ))}
