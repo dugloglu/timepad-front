@@ -9,13 +9,10 @@ import {useNavigate} from "react-router-dom";
 export const AddEvent: React.FC = () => {
     const navigate = useNavigate()
     const [eventData, setEventData] = useState<EventData>({
-        name: "",
-        description: "",
-        img: "",
-        date: "",
-        status: false,
-        location: "",
-        members: [],
+      title:'',
+        body:'',
+        created_at:'',
+        user_id:0,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +35,7 @@ export const AddEvent: React.FC = () => {
         e.preventDefault();
         try {
             // Отправка данных на сервер
-            await axios.post(`${url}/api/events`, eventData);
+            await axios.post(`${url}/api/post`, eventData);
             navigate('/')
             // Успешно отправлено
             console.log("Данные успешно отправлены:", eventData);
@@ -53,53 +50,30 @@ export const AddEvent: React.FC = () => {
             <br/>
         <form onSubmit={handleSubmit}>
             <TextField
-                name="name"
+                name="title"
                 label="Название"
-                value={eventData.name}
+                value={eventData.title}
                 onChange={handleChange}
                 required
             />  <br/>  <br/>
             <TextField
-                name="description"
+                name="body"
                 label="Описание"
-                value={eventData.description}
+                value={eventData.body}
                 onChange={handleChange}
                 required
             />  <br/>  <br/>
+
             <TextField
-                name="img"
-                label="Изображение"
-                value={eventData.img}
-                onChange={handleChange}
-                required
-            />  <br/>  <br/>
-            <TextField
-                name="date"
+                name="created_at"
                 label="Дата"
                 type="date"
-                value={eventData.date}
+                value={eventData.created_at}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true }}
                 required
             />  <br/>  <br/>
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        name="status"
-                        checked={eventData.status}
-                        onChange={handleCheckboxChange}
-                        color="primary"
-                    />
-                }
-                label="Статус"
-            />  <br/>  <br/>
-            <TextField
-                name="location"
-                label="Местоположение"
-                value={eventData.location}
-                onChange={handleChange}
-                required
-            />  <br/>  <br/>
+
 
             <Button type="submit" variant="contained" color="primary">
                 Создать событие

@@ -5,15 +5,17 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {url} from "../utils/api";
-import {Event} from "../types/Event";
+import {EventType} from "../types/EventType";
 import Button from "@mui/material/Button";
+import {Link} from "react-router-dom";
 const EventCard: React.FC = () => {
-    const [events, setEvents] = useState<Event[]>([]);
-
+    const token = localStorage.getItem('token');
+    const [events, setEvents] = useState<EventType[]>([]);
+    const user = localStorage.getItem('id')
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get<Event[]>(`${url}/api/events`);
+                const response = await axios.get<EventType[]>(`${url}/api/post`);
                 setEvents(response.data);
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
@@ -25,40 +27,59 @@ const EventCard: React.FC = () => {
 
     const handleDelete = async(id:number)=>{
         try {
-            const resonse = axios.delete(`${url}/api/events/${id}`)
+              axios.delete(`${url}/api/post/${id}`)
         }catch (e) {
             console.error(e)
         }
     }
 
+    // const handleRegister = async(user_id:number,event_id:number)=>{
+    //     try {
+    //         axios.put(`${url}/api/events/${event_id}/register/${user_id}`)
+    //         alert(`Вы успешно зарегистрированны на мероприятие`)
+    //     }catch (e) {
+    //         console.error(e)
+    //     }
+    // }
+
     return (
         <div style={{ display: 'flex', flexDirection: 'row', gap: '20px',justifyContent:'center',alignItems:'center' }}>
             {events.map((event) => (
+                
                 <Card key={event.id} sx={{ maxWidth: 345 }}>
-                    <CardMedia
-                        component="img"
-                        height="140"
-                        image={event.img}
-                        alt={event.name}
-                    />
+                    {token ? (
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                            {event.name}
+                            {event.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {event.description}
+                            {event.body}
                         </Typography>
+                       
                         <Typography variant="body2" color="text.secondary">
-                            Location: {event.location}
+                            Date: {new Date(event.created_at).toLocaleDateString()}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            Date: {new Date(event.date).toLocaleDateString()}
-                        </Typography>
-                        <Button variant='contained'>Подробнее</Button><br/><br/>
-                        <Button variant='contained'>Записаться</Button><br/><br/>
-                        <Button onClick={() => handleDelete(event.id)} variant='contained'>Удалить</Button><br/><br/>
+                      <Link to={`event/${event.id}`}> <Button color='secondary' variant='contained'>Подробнее</Button></Link> <br/><br/>
 
-                    </CardContent>
+                        <Button onClick={() => handleDelete(event.id)} color='secondary' variant='contained'>Удалить</Button><br/><br/>
+
+                    </CardContent>) : (
+                            <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                {event.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {event.body}
+                            </Typography>
+                           
+                            <Typography variant="body2" color="text.secondary">
+                                Date: {new Date(event.created_at).toLocaleDateString()}
+                            </Typography>
+                          <Link to={`event/${event.id}`}> <Button color='secondary' variant='contained'>Подробнее</Button></Link> <br/><br/>
+
+    
+                        </CardContent>
+                        )}
                 </Card>
             ))}
         </div>

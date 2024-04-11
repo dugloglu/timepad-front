@@ -1,9 +1,6 @@
 export interface EventData {
-    name: string;
-    description: string;
-    img: string;
-    date: string;
-    status: boolean;
-    location: string;
-    members: string[];
+    title:string;
+    created_at:string;
+    body:string
+    user_id:number
 }
